@@ -1,0 +1,6 @@
+http://localhost:8080/api/image/comment
+{
+    "content":"haha",
+    "image_id": 3
+  }
+Bình luận thành công

@@ -6,8 +6,8 @@ import { authApi } from "../config/jwt.js";
 const userRoote = express.Router();
 
 userRoote.get('/get-user',authApi, getUserInfor)
-userRoote.post('/sign-up',authApi, userSignUp)
-userRoote.post('/login',authApi, userLogin)
+userRoote.post('/sign-up', userSignUp)
+userRoote.post('/login', userLogin)
 userRoote.put('/update-user',authApi, userUpdate)
 userRoote.put('/upload-avatar',authApi,upload.single('file'), uploadAvatar)
 

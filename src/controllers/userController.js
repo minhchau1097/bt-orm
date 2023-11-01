@@ -6,16 +6,16 @@ import compress_images from "compress-images";
 let model = initModels(sequelize);
 
 const userSignUp = async (req, res) => {
-  let { email, pass_word } = req.body;
+  let { email, pass } = req.body;
   if (!email) return res.send('Email không được rỗng')
-  if (!pass_word) return res.send('Mật khẩu không được rỗng')
+  if (!pass) return res.send('Mật khẩu không được rỗng')
   let checkMail = await model.users.findOne({
     where: {
       email
     }
   });
   if (checkMail) return res.send('Email đã tồn tại');
-  let passCrypt = bcrypt.hashSync(pass_word, 10);
+  let passCrypt = bcrypt.hashSync(pass, 10);
   let newData = {
     full_name: '',
     email,
@@ -24,7 +24,8 @@ const userSignUp = async (req, res) => {
     age: 0,
   }
   await model.users.create(newData)
-  res.send({...newData, pass_word : ''});
+  const { pass_word, ...updateData } = newData
+  res.send(updateData);
 };
 const userLogin = async (req, res) => {
   let { email, pass_word } = req.body;
@@ -81,7 +82,7 @@ const userUpdate = async (req, res) => {
     if (bcrypt.compareSync(pass_word, checkEmail.pass_word)) {
       let passCrypt = bcrypt.hashSync(new_pass, 10);
       checkEmail = { ...checkEmail, full_name, email, age, pass_word: passCrypt }
-     await model.users.update(checkEmail, {
+      await model.users.update(checkEmail, {
         where: {
           user_id: userInfor.data.user_id
         }
